@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://Entities/Player/player_up_fireball_1.png" type="Texture" id=1]
 [ext_resource path="res://Entities/Player/Player.gd" type="Script" id=2]
@@ -34,9 +34,18 @@
 [ext_resource path="res://Entities/Player/player_right_fireball_2.png" type="Texture" id=32]
 [ext_resource path="res://Entities/Player/player_up_idle_2.png" type="Texture" id=33]
 [ext_resource path="res://Entities/Player/player_right_idle_2.png" type="Texture" id=34]
+[ext_resource path="res://GUI/HealthBar.gd" type="Script" id=35]
+[ext_resource path="res://GUI/ManaBar.gd" type="Script" id=36]
+[ext_resource path="res://Fonts/Font.tres" type="DynamicFont" id=37]
+[ext_resource path="res://GUI/potions.png" type="Texture" id=38]
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
+"frames": [ ExtResource( 6 ), ExtResource( 5 ), ExtResource( 15 ) ],
+"loop": false,
+"name": "up_attack",
+"speed": 7.0
+}, {
 "frames": [ ExtResource( 18 ), ExtResource( 29 ) ],
 "loop": true,
 "name": "down_idle",
@@ -45,11 +54,6 @@ animations = [ {
 "frames": [ ExtResource( 18 ), ExtResource( 8 ), ExtResource( 28 ) ],
 "loop": false,
 "name": "down_fireball",
-"speed": 7.0
-}, {
-"frames": [ ExtResource( 24 ), ExtResource( 7 ) ],
-"loop": false,
-"name": "down_atack",
 "speed": 7.0
 }, {
 "frames": [ ExtResource( 30 ), ExtResource( 17 ), ExtResource( 30 ), ExtResource( 16 ) ],
@@ -77,11 +81,6 @@ animations = [ {
 "name": "left_fireball",
 "speed": 7.0
 }, {
-"frames": [ ExtResource( 6 ), ExtResource( 5 ), ExtResource( 15 ) ],
-"loop": false,
-"name": "up_ttack",
-"speed": 7.0
-}, {
 "frames": [ ExtResource( 21 ), ExtResource( 34 ) ],
 "loop": true,
 "name": "right_idle",
@@ -107,18 +106,23 @@ animations = [ {
 "name": "right_fireball",
 "speed": 7.0
 }, {
-"frames": [ ExtResource( 21 ), ExtResource( 9 ), ExtResource( 19 ) ],
-"loop": false,
-"name": "right_atack",
-"speed": 7.0
-}, {
 "frames": [ ExtResource( 18 ), ExtResource( 27 ), ExtResource( 23 ), ExtResource( 18 ) ],
 "loop": true,
 "name": "down_walk",
 "speed": 10.0
+}, {
+"frames": [ ExtResource( 24 ), ExtResource( 7 ) ],
+"loop": false,
+"name": "down_attack",
+"speed": 7.0
+}, {
+"frames": [ ExtResource( 21 ), ExtResource( 9 ), ExtResource( 19 ) ],
+"loop": false,
+"name": "right_attack",
+"speed": 7.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 5, 7.00001 )
 
 [node name="Root" type="Node"]
@@ -129,11 +133,11 @@ z_index = 1
 script = ExtResource( 2 )
 
 [node name="Sprite" type="AnimatedSprite" parent="Player"]
-frames = SubResource( 2 )
-animation = "down_idle"
+frames = SubResource( 1 )
+animation = "up_attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -153,3 +157,138 @@ cell_size = Vector2( 8, 8 )
 cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 format = 1
 tile_data = PoolIntArray( 131087, 4, 0, 196630, 4, 0, 196631, 4, 0, 196632, 4, 0, 196641, 4, 0, 327690, 4, 0, 720908, 4, 0, 720929, 4, 0, 786477, 4, 0, 786479, 4, 0, 852014, 4, 0, 917518, 4, 0, 917549, 4, 0, 917551, 4, 0, 1245211, 4, 0, 1507398, 4, 0, 1638472, 4, 0, 1769543, 4, 0, 1835076, 4, 0, 1900610, 4, 0, 1900614, 4, 0, 1900617, 4, 0, 2097226, 4, 0, 2490374, 4, 0, 2490377, 4, 0, 2621453, 4, 0, 2687026, 4, 0, 2687027, 4, 0, 2687028, 4, 0, 2687030, 4, 0, 2687032, 4, 0, 2752564, 4, 0, 2752567, 4, 0, 2752569, 4, 0, 2818097, 4, 0, 2818098, 4, 0, 2818099, 4, 0, 2818101, 4, 0, 2818106, 4, 0, 2883587, 4, 0, 2883598, 4, 0, 2883633, 4, 0, 2883634, 4, 0, 2883641, 4, 0, 2949169, 4, 0, 3014704, 4, 0, 3080240, 4, 0, 3080241, 4, 0, 3145752, 4, 0, 3342367, 4, 0, 3670047, 4, 0, 3670053, 4, 0, 3735579, 4, 0, 3866660, 4, 0, 3932189, 4, 0, 3997729, 4, 0, 4063258, 4, 0, 4128802, 4, 0 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Health" type="ColorRect" parent="CanvasLayer"]
+margin_left = 3.0
+margin_top = 158.0
+margin_right = 77.0
+margin_bottom = 167.0
+color = Color( 0, 0, 0, 0.627451 )
+script = ExtResource( 35 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bar" type="ColorRect" parent="CanvasLayer/Health"]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 73.0
+margin_bottom = 8.0
+color = Color( 1, 0.196078, 0.196078, 1 )
+
+[node name="Mana" type="ColorRect" parent="CanvasLayer"]
+margin_left = 3.0
+margin_top = 169.0
+margin_right = 77.0
+margin_bottom = 178.0
+color = Color( 0, 0, 0, 0.627451 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bar" type="ColorRect" parent="CanvasLayer/Mana"]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 73.0
+margin_bottom = 8.0
+color = Color( 0.129412, 0.501961, 1, 1 )
+
+[node name="XP" type="ColorRect" parent="CanvasLayer"]
+margin_left = 124.0
+margin_top = 158.0
+margin_right = 196.0
+margin_bottom = 178.0
+color = Color( 0, 0, 0, 0.627451 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LabelXP" type="Label" parent="CanvasLayer/XP"]
+margin_left = 2.0
+margin_top = 1.0
+margin_right = 22.0
+margin_bottom = 15.0
+custom_fonts/font = ExtResource( 37 )
+text = "XP:"
+
+[node name="LabelLevel" type="Label" parent="CanvasLayer/XP"]
+margin_left = 2.0
+margin_top = 10.0
+margin_right = 28.0
+margin_bottom = 24.0
+custom_fonts/font = ExtResource( 37 )
+text = "LVL:"
+
+[node name="ValueXP" type="Label" parent="CanvasLayer/XP"]
+margin_left = 21.0
+margin_top = 1.0
+margin_right = 71.0
+margin_bottom = 15.0
+custom_fonts/font = ExtResource( 37 )
+text = "0/100"
+align = 2
+
+[node name="ValueLevel" type="Label" parent="CanvasLayer/XP"]
+margin_left = 21.0
+margin_top = 10.0
+margin_right = 70.0
+margin_bottom = 24.0
+custom_fonts/font = ExtResource( 37 )
+text = "1"
+align = 2
+
+[node name="HealthPotions" type="ColorRect" parent="CanvasLayer"]
+margin_left = 243.0
+margin_top = 158.0
+margin_right = 279.0
+margin_bottom = 178.0
+color = Color( 0, 0, 0, 0.627451 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="CanvasLayer/HealthPotions"]
+position = Vector2( 10, 10 )
+texture = ExtResource( 38 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="Label" type="Label" parent="CanvasLayer/HealthPotions"]
+margin_left = 19.0
+margin_top = 6.0
+margin_right = 33.0
+margin_bottom = 16.0
+custom_fonts/font = ExtResource( 37 )
+text = "0"
+align = 2
+
+[node name="ManaPotions" type="ColorRect" parent="CanvasLayer"]
+margin_left = 281.0
+margin_top = 158.0
+margin_right = 317.0
+margin_bottom = 178.0
+color = Color( 0, 0, 0, 0.627451 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="CanvasLayer/ManaPotions"]
+position = Vector2( 10, 10 )
+texture = ExtResource( 38 )
+region_enabled = true
+region_rect = Rect2( 16, 0, 16, 16 )
+
+[node name="Label" type="Label" parent="CanvasLayer/ManaPotions"]
+margin_left = 19.0
+margin_top = 6.0
+margin_right = 33.0
+margin_bottom = 16.0
+custom_fonts/font = ExtResource( 37 )
+text = "0"
+align = 2
+[connection signal="player_stats_changed" from="Player" to="CanvasLayer/Mana" method="_on_Player_player_stats_changed"]
+[connection signal="player_stats_changed" from="Player" to="CanvasLayer/Health" method="_on_Player_player_stats_changed"]
+[connection signal="animation_finished" from="Player/Sprite" to="Player" method="_on_Sprite_animation_finished"]
