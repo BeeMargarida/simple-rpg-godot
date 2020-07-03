@@ -16,8 +16,8 @@ const PROXIMITY = 16
 # Animation variables
 var other_animation_playing = false
 
-func get_animation_direction(direction: Vector2):
-	var norm_direction = direction.normalized()
+func get_animation_direction(dir: Vector2):
+	var norm_direction = dir.normalized()
 	if norm_direction.y >= 0.707:
 		return "down"
 	elif norm_direction.y <= -0.707:
@@ -28,9 +28,9 @@ func get_animation_direction(direction: Vector2):
 		return "right"
 	return "down"
 
-func animates_monster(direction: Vector2):
-	if direction != Vector2.ZERO:
-		last_direction = direction
+func animates_monster(dir: Vector2):
+	if dir != Vector2.ZERO:
+		last_direction = dir
 		
 		# Choose walk animation based on movement direction
 		var animation = get_animation_direction(last_direction) + "_walk"
@@ -41,6 +41,16 @@ func animates_monster(direction: Vector2):
 		# Choose idle animation based on last movement direction and play it
 		var animation = get_animation_direction(last_direction) + "_idle"
 		$AnimatedSprite.play(animation)
+		
+func arise():
+	other_animation_playing = true
+	$AnimatedSprite.play("birth")
+	
+func _on_AnimatedSprite_animation_finished():
+	if $AnimatedSprite.animation == "birth":
+		$AnimatedSprite.animation = "down_idle"
+		$Timer.start()
+	other_animation_playing = false
 
 func _on_Timer_timeout():
 	# Calculate the position of the player relative to the skeleton
@@ -80,5 +90,3 @@ func _physics_process(delta):
 func _ready():
 	player = get_tree().root.get_node("Root/Player")
 	rng.randomize()
-
-
